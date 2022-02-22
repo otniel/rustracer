@@ -33,6 +33,12 @@ impl Tuple {
             _ => panic!("Unknown value for w."),
         }
     }
+
+    fn magnitude(&self) -> f64 {
+        let radicand = self.x.powi(2) + self.y.powi(2) + self.z.powi(2) + self.w.powi(2);
+
+        f64::sqrt(radicand)
+    }
 }
 
 impl Add for Tuple {
@@ -219,5 +225,39 @@ mod tests {
         let res = v / 2.0;
 
         assert_eq!(res, Tuple::new(0.5, -1.0, 1.5, -2.0))
+    }
+    #[test]
+    fn it_can_compute_vector_magnitude_1() {
+        let v = Tuple::vector(1.0, 0.0, 0.0);
+
+        assert_eq!(v.magnitude(), 1.0)
+    }
+
+    #[test]
+    fn it_can_compute_vector_magnitude_2() {
+        let v = Tuple::vector(0.0, 1.0, 0.0);
+
+        assert_eq!(v.magnitude(), 1.0)
+    }
+
+    #[test]
+    fn it_can_compute_vector_magnitude_3() {
+        let v = Tuple::vector(0.0, 0.0, 1.0);
+
+        assert_eq!(v.magnitude(), 1.0)
+    }
+
+    #[test]
+    fn it_can_compute_vector_magnitude_4() {
+        let v = Tuple::vector(1.0, 2.0, 3.0);
+
+        assert_eq!(v.magnitude(), f64::sqrt(14.0));
+    }
+
+    #[test]
+    fn it_can_compute_vector_magnitude_5() {
+        let v = Tuple::vector(-1.0, -2.0, -3.0);
+
+        assert_eq!(v.magnitude(), f64::sqrt(14.0));
     }
 }
