@@ -1,4 +1,4 @@
-use std::{ops::Add, ops::Sub};
+use std::{ops::Add, ops::Neg, ops::Sub};
 
 #[derive(Debug, PartialEq)]
 enum TupleKinds {
@@ -57,6 +57,19 @@ impl Sub for Tuple {
             y: self.y - other.y,
             z: self.z - other.z,
             w: self.w - other.w,
+        }
+    }
+}
+
+impl Neg for Tuple {
+    type Output = Self;
+
+    fn neg(self) -> Self::Output {
+        Self {
+            x: -self.x,
+            y: -self.y,
+            z: -self.z,
+            w: -self.w,
         }
     }
 }
@@ -132,5 +145,18 @@ mod tests {
         let v2 = Tuple::vector(5.0, 6.0, 7.0);
 
         assert_eq!(v1 - v2, Tuple::vector(-2.0, -4.0, -6.0))
+    }
+    #[test]
+    fn it_can_subtract_a_vector_from_the_zero_vector() {
+        let zero = Tuple::vector(0.0, 0.0, 0.0);
+        let v = Tuple::vector(1.0, -2.0, 3.0);
+
+        assert_eq!(zero - v, Tuple::vector(-1.0, 2.0, -3.0));
+    }
+    #[test]
+    fn it_can_negate_a_tuple() {
+        let t = Tuple::new(1.0, -2.0, 3.0, -4.0);
+
+        assert_eq!(-t, Tuple::new(-1.0, 2.0, -3.0, 4.0));
     }
 }
