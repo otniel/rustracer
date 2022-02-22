@@ -1,4 +1,4 @@
-use std::{ops::Add, ops::Neg, ops::Sub};
+use std::ops::{Add, Div, Mul, Neg, Sub};
 
 #[derive(Debug, PartialEq)]
 enum TupleKinds {
@@ -70,6 +70,32 @@ impl Neg for Tuple {
             y: -self.y,
             z: -self.z,
             w: -self.w,
+        }
+    }
+}
+
+impl Mul<f64> for Tuple {
+    type Output = Self;
+
+    fn mul(self, scalar: f64) -> Self::Output {
+        Self {
+            x: self.x * scalar,
+            y: self.y * scalar,
+            z: self.z * scalar,
+            w: self.w * scalar,
+        }
+    }
+}
+
+impl Div<f64> for Tuple {
+    type Output = Self;
+
+    fn div(self, scalar: f64) -> Self::Output {
+        Self {
+            x: self.x / scalar,
+            y: self.y / scalar,
+            z: self.z / scalar,
+            w: self.w / scalar,
         }
     }
 }
@@ -149,7 +175,7 @@ mod tests {
         let v2 = Tuple::vector(5.0, 6.0, 7.0);
 
         let res = v1 - v2;
-        assert_eq!(res, Tuple::vector(-2.0, -4.0, -6.0))
+        assert_eq!(res, Tuple::vector(-2.0, -4.0, -6.0));
         assert_eq!(res.kind(), TupleKinds::Vector);
     }
     #[test]
@@ -166,5 +192,32 @@ mod tests {
         let t = Tuple::new(1.0, -2.0, 3.0, -4.0);
 
         assert_eq!(-t, Tuple::new(-1.0, 2.0, -3.0, 4.0));
+    }
+
+    #[test]
+    fn it_can_multiply_a_vector_with_a_scalar() {
+        let v = Tuple::new(1.0, -2.0, 3.0, -4.0);
+
+        let res = v * 3.5;
+
+        assert_eq!(res, Tuple::new(3.5, -7.0, 10.5, -14.0))
+    }
+
+    #[test]
+    fn it_can_multiply_a_tuple_with_a_fraction() {
+        let v = Tuple::new(1.0, -2.0, 3.0, -4.0);
+
+        let res = v * 0.5;
+
+        assert_eq!(res, Tuple::new(0.5, -1.0, 1.5, -2.0))
+    }
+
+    #[test]
+    fn it_can_divide_a_tuple_with_a_scalar() {
+        let v = Tuple::new(1.0, -2.0, 3.0, -4.0);
+
+        let res = v / 2.0;
+
+        assert_eq!(res, Tuple::new(0.5, -1.0, 1.5, -2.0))
     }
 }
