@@ -128,7 +128,9 @@ mod tests {
         let a1 = Tuple::point(3.0, 2.0, 1.0);
         let a2 = Tuple::point(5.0, 6.0, 7.0);
 
-        assert_eq!(a1 - a2, Tuple::vector(-2.0, -4.0, -6.0))
+        let res = a1 - a2;
+        assert_eq!(res, Tuple::vector(-2.0, -4.0, -6.0));
+        assert_eq!(res.kind(), TupleKinds::Vector);
     }
 
     #[test]
@@ -136,7 +138,9 @@ mod tests {
         let p = Tuple::point(3.0, 2.0, 1.0);
         let v = Tuple::vector(5.0, 6.0, 7.0);
 
-        assert_eq!(p - v, Tuple::point(-2.0, -4.0, -6.0))
+        let res = p - v;
+        assert_eq!(res, Tuple::point(-2.0, -4.0, -6.0));
+        assert_eq!(res.kind(), TupleKinds::Point);
     }
 
     #[test]
@@ -144,14 +148,18 @@ mod tests {
         let v1 = Tuple::vector(3.0, 2.0, 1.0);
         let v2 = Tuple::vector(5.0, 6.0, 7.0);
 
-        assert_eq!(v1 - v2, Tuple::vector(-2.0, -4.0, -6.0))
+        let res = v1 - v2;
+        assert_eq!(res, Tuple::vector(-2.0, -4.0, -6.0))
+        assert_eq!(res.kind(), TupleKinds::Vector);
     }
     #[test]
     fn it_can_subtract_a_vector_from_the_zero_vector() {
         let zero = Tuple::vector(0.0, 0.0, 0.0);
         let v = Tuple::vector(1.0, -2.0, 3.0);
 
-        assert_eq!(zero - v, Tuple::vector(-1.0, 2.0, -3.0));
+        let res = zero - v;
+        assert_eq!(res, Tuple::vector(-1.0, 2.0, -3.0));
+        assert_eq!(res.kind(), TupleKinds::Vector);
     }
     #[test]
     fn it_can_negate_a_tuple() {
