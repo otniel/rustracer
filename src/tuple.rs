@@ -1,16 +1,18 @@
 use std::ops::{Add, Div, Mul, Neg, Sub};
 
+
 #[derive(Debug, PartialEq)]
 enum TupleKinds {
     Point,
     Vector,
 }
-#[derive(Debug, PartialEq)]
-struct Tuple {
-    x: f64,
-    y: f64,
-    z: f64,
-    w: f64,
+
+#[derive(Copy, Debug, PartialEq, Clone)]
+pub struct Tuple {
+    pub x: f64,
+    pub y: f64,
+    pub z: f64,
+    pub w: f64,
 }
 
 impl Tuple {
@@ -18,11 +20,11 @@ impl Tuple {
         Tuple { x, y, z, w }
     }
 
-    fn point(x: f64, y: f64, z: f64) -> Tuple {
+    pub fn point(x: f64, y: f64, z: f64) -> Tuple {
         Self::new(x, y, z, 1.0)
     }
 
-    fn vector(x: f64, y: f64, z: f64) -> Tuple {
+    pub fn vector(x: f64, y: f64, z: f64) -> Tuple {
         Self::new(x, y, z, 0.0)
     }
 
@@ -34,13 +36,13 @@ impl Tuple {
         }
     }
 
-    fn magnitude(&self) -> f64 {
+    pub fn magnitude(&self) -> f64 {
         let radicand = self.x.powi(2) + self.y.powi(2) + self.z.powi(2) + self.w.powi(2);
 
         f64::sqrt(radicand)
     }
 
-    fn normalize(&self) -> Tuple {
+    pub fn normalize(&self) -> Tuple {
         let x = self.x / self.magnitude();
         let y = self.y / self.magnitude();
         let z = self.z / self.magnitude();
