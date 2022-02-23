@@ -13,6 +13,7 @@ struct Tuple {
     w: f64,
 }
 
+
 impl Tuple {
     pub fn new(x: f64, y: f64, z: f64, w: f64) -> Tuple {
         Tuple { x, y, z, w }
@@ -38,6 +39,15 @@ impl Tuple {
         let radicand = self.x.powi(2) + self.y.powi(2) + self.z.powi(2) + self.w.powi(2);
 
         f64::sqrt(radicand)
+    }
+
+    fn normalize(&self) -> Tuple {
+        let x = self.x / self.magnitude();
+        let y = self.y / self.magnitude();
+        let z = self.z / self.magnitude();
+        let w = self.w / self.magnitude();
+
+        Tuple::new(x, y, z, w)
     }
 }
 
@@ -259,5 +269,27 @@ mod tests {
         let v = Tuple::vector(-1.0, -2.0, -3.0);
 
         assert_eq!(v.magnitude(), f64::sqrt(14.0));
+    }
+
+    #[test]
+    fn it_can_normalize_a_vector() {
+        let v = Tuple::vector(4.0, 0.0, 0.0);
+        assert_eq!(v.normalize(), Tuple::vector(1.0, 0.0, 0.0));
+    }
+
+    #[test]
+    fn it_can_normalize_a_vector_2() {
+        let v = Tuple::vector(1.0, 2.0, 3.0);
+        assert_eq!(v.normalize(), Tuple::vector(
+            1.0 / f64::sqrt(14.0),
+            2.0 / f64::sqrt(14.0),
+            3.0 / f64::sqrt(14.0),
+        ));
+    }
+
+    #[test]
+    fn it_can_compute_magnitude_of_normalized_vector() {
+        let v = Tuple::vector(1.0, 2.0, 3.0);
+        assert_eq!(v.normalize().magnitude(), 1.0);
     }
 }
