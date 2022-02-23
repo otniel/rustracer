@@ -13,7 +13,6 @@ struct Tuple {
     w: f64,
 }
 
-
 impl Tuple {
     pub fn new(x: f64, y: f64, z: f64, w: f64) -> Tuple {
         Tuple { x, y, z, w }
@@ -114,6 +113,18 @@ impl Div<f64> for Tuple {
             w: self.w / scalar,
         }
     }
+}
+
+fn dot(a: &Tuple, b: &Tuple) -> f64 {
+    a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w
+}
+
+fn cross(a: &Tuple, b: &Tuple) -> Tuple {
+    Tuple::vector(
+        a.y * b.z - a.z * b.y,
+        a.z * b.x - a.x * b.z,
+        a.x * b.y - a.y * b.x,
+    )
 }
 
 #[cfg(test)]
@@ -280,16 +291,38 @@ mod tests {
     #[test]
     fn it_can_normalize_a_vector_2() {
         let v = Tuple::vector(1.0, 2.0, 3.0);
-        assert_eq!(v.normalize(), Tuple::vector(
-            1.0 / f64::sqrt(14.0),
-            2.0 / f64::sqrt(14.0),
-            3.0 / f64::sqrt(14.0),
-        ));
+        assert_eq!(
+            v.normalize(),
+            Tuple::vector(
+                1.0 / f64::sqrt(14.0),
+                2.0 / f64::sqrt(14.0),
+                3.0 / f64::sqrt(14.0),
+            )
+        );
     }
 
     #[test]
     fn it_can_compute_magnitude_of_normalized_vector() {
         let v = Tuple::vector(1.0, 2.0, 3.0);
         assert_eq!(v.normalize().magnitude(), 1.0);
+    }
+
+    #[test]
+    fn it_can_compute_dot_product() {
+        let v1 = Tuple::vector(1.0, 2.0, 3.0);
+        let v2 = Tuple::vector(2.0, 3.0, 4.0);
+
+        assert_eq!(dot(&v1, &v2), 20.0)
+    }
+
+    #[test]
+    fn it_can_compute_cross_product() {
+        let a = Tuple::vector(1.0, 2.0, 3.0);
+        let b = Tuple::vector(2.0, 3.0, 4.0);
+
+        let cross_ab = cross(&a, &b);
+        let cross_ba = cross(&b, &a);
+        assert_eq!(cross_ab, Tuple::vector(-1.0, 2.0, -1.0));
+        assert_eq!(cross_ba, Tuple::vector(1.0, -2.0, 1.0));
     }
 }
