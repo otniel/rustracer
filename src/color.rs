@@ -5,14 +5,14 @@ fn assert_float_eq(a: f64, b: f64) -> bool {
 }
 
 #[derive(Debug)]
-struct Color {
+pub struct Color {
     red: f64,
     green: f64,
     blue: f64,
 }
 
 impl Color {
-    fn new(red: f64, green: f64, blue: f64) -> Color {
+    pub fn new(red: f64, green: f64, blue: f64) -> Color {
         Color { red, green, blue }
     }
 }
