@@ -4,6 +4,18 @@ fn assert_float_eq(a: f64, b: f64) -> bool {
     f64::abs(a - b) < f64::EPSILON
 }
 
+fn translate_color(float_color: f64) -> i32 {
+    /// Translate from a value between 0 and 1 to 0-255
+    if float_color <= 0.0 {
+        return 0;
+    }
+
+    if float_color >= 1.0 {
+        return 255;
+    }
+    (float_color * 256.0 / 1.0) as i32
+}
+
 #[derive(Debug)]
 pub struct Color {
     red: f64,
@@ -14,6 +26,15 @@ pub struct Color {
 impl Color {
     pub fn new(red: f64, green: f64, blue: f64) -> Color {
         Color { red, green, blue }
+    }
+
+    pub fn to_string(&self) -> String {
+        format!(
+            "{} {} {}",
+            translate_color(self.red),
+            translate_color(self.green),
+            translate_color(self.blue)
+        )
     }
 }
 
