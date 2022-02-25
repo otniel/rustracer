@@ -1,36 +1,8 @@
-use rustracer::tuple::Tuple;
 use std::thread::sleep;
 use std::time::Duration;
 
-#[derive(Debug)]
-struct Projectile {
-    position: Tuple,
-    velocity: Tuple,
-}
-
-impl Projectile {
-    fn new(position: Tuple, velocity: Tuple) -> Projectile {
-        Projectile { position, velocity }
-    }
-}
-
-struct Environment {
-    gravity: Tuple,
-    wind: Tuple,
-}
-
-impl Environment {
-    fn new(gravity: Tuple, wind: Tuple) -> Environment {
-        Environment { gravity, wind }
-    }
-}
-
-fn tick(environment: &Environment, projectile: &Projectile) -> Projectile {
-    Projectile::new(
-        projectile.position + projectile.velocity,
-        projectile.velocity + environment.gravity + environment.wind,
-    )
-}
+use rustracer::projectiles::{tick, Environment, Projectile};
+use rustracer::tuple::Tuple;
 
 fn main() {
     let p = Projectile::new(
@@ -47,6 +19,6 @@ fn main() {
     while current.position.y > 0.0 {
         println!("{:?}", current);
         current = tick(&e, &current);
-        sleep(Duration::from_secs(1));
+        sleep(Duration::from_millis(250));
     }
 }

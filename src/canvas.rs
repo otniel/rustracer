@@ -2,9 +2,9 @@ use crate::color::Color;
 
 const MAX_ROW_LENGTH: usize = 70;
 
-struct Canvas {
-    width: i32,
-    height: i32,
+pub struct Canvas {
+    pub width: i32,
+    pub height: i32,
     pixels: Vec<Color>,
 }
 
