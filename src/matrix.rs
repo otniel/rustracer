@@ -33,6 +33,20 @@ impl Matrix {
         }
     }
 
+    pub fn transpose(&self) -> Matrix {
+        let mut data = vec![0.0; (self.width * self.height) as usize];
+        for x in 0..self.width {
+            for y in 0..self.height {
+                let index = (x * self.width + y) as usize;
+                data[index] = self.get(y, x)
+            }
+        }
+        Matrix {
+            width: self.width,
+            height: self.height,
+            data,
+        }
+    }
     pub fn fill(&mut self, data: Vec<f64>) {
         self.data = data;
     }
@@ -232,6 +246,7 @@ mod tests {
         ]);
         assert_eq!(matrix_a * matrix_b, expected_matrix)
     }
+
     #[test]
     fn test_a_matrix_can_be_multiplied_by_a_tuple() {
         // Given the following matrix A:
@@ -273,5 +288,39 @@ mod tests {
         ]);
 
         assert_eq!(matrix_a * identity, expected_matrix)
+    }
+
+    #[test]
+    fn test_transposing_a_matrix() {
+        // Given the following matrix A:
+        // |0|9|3|0|
+        // |9|8|0|8|
+        // |1|8|5|3|
+        // |0|0|5|8|
+        // Then transpose(A) is the following matrix:
+        // |0|9|1|0|
+        // |9|8|8|0|
+        // |3|0|5|5|
+        // |0|8|3|8|
+        // (0, 0), (1, 0), (2, 0), (3, 0), (0, 1), (1, 1), (2, 1)
+
+        let mut matrix_a = Matrix::new(4, 4);
+        matrix_a.fill(vec![
+            0.0, 9.0, 3.0, 0.0, 9.0, 8.0, 0.0, 8.0, 1.0, 8.0, 5.0, 3.0, 0.0, 0.0, 5.0, 8.0,
+        ]);
+
+        let mut transposed_matrix = Matrix::new(4, 4);
+        transposed_matrix.fill(vec![
+            0.0, 9.0, 1.0, 0.0, 9.0, 8.0, 8.0, 0.0, 3.0, 0.0, 5.0, 5.0, 0.0, 8.0, 3.0, 8.0,
+        ]);
+
+        assert_eq!(matrix_a.transpose(), transposed_matrix)
+    }
+
+    #[test]
+    fn test_transposing_the_identity_matrix() {
+        let im = Matrix::identity(4, 4);
+
+        assert_eq!(im.transpose(), im)
     }
 }
