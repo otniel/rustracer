@@ -1,11 +1,9 @@
+use crate::assert_float_eq;
+use std::fmt::{Display, Formatter};
 use std::ops::{Add, Mul, Sub};
 
-fn assert_float_eq(a: f64, b: f64) -> bool {
-    f64::abs(a - b) < f64::EPSILON
-}
-
 fn translate_color(float_color: f64) -> i32 {
-    /// Translate from a value between 0 and 1 to 0-255
+    // Translate from a value between 0 and 1 to 0-255
     if float_color <= 0.0 {
         return 0;
     }
@@ -27,15 +25,6 @@ impl Color {
     pub fn new(red: f64, green: f64, blue: f64) -> Color {
         Color { red, green, blue }
     }
-
-    pub fn to_string(&self) -> String {
-        format!(
-            "{} {} {}",
-            translate_color(self.red),
-            translate_color(self.green),
-            translate_color(self.blue)
-        )
-    }
 }
 
 impl PartialEq for Color {
@@ -43,6 +32,18 @@ impl PartialEq for Color {
         assert_float_eq(self.red, other.red)
             && assert_float_eq(self.green, other.green)
             && assert_float_eq(self.blue, other.blue)
+    }
+}
+
+impl Display for Color {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "{} {} {}",
+            translate_color(self.red),
+            translate_color(self.green),
+            translate_color(self.blue)
+        )
     }
 }
 
