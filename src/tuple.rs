@@ -1,8 +1,7 @@
 use std::ops::{Add, Div, Mul, Neg, Sub};
 
-
 #[derive(Debug, PartialEq)]
-enum TupleKinds {
+pub enum TupleKinds {
     Point,
     Vector,
 }
@@ -28,10 +27,10 @@ impl Tuple {
         Self::new(x, y, z, 0.0)
     }
 
-    fn kind(&self) -> TupleKinds {
-        match self.w {
-            1.0 => TupleKinds::Point,
-            0.0 => TupleKinds::Vector,
+    pub fn kind(&self) -> TupleKinds {
+        match self.w as usize {
+            1 => TupleKinds::Point,
+            0 => TupleKinds::Vector,
             _ => panic!("Unknown value for w."),
         }
     }
@@ -117,11 +116,11 @@ impl Div<f64> for Tuple {
     }
 }
 
-fn dot(a: &Tuple, b: &Tuple) -> f64 {
+pub fn dot(a: &Tuple, b: &Tuple) -> f64 {
     a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w
 }
 
-fn cross(a: &Tuple, b: &Tuple) -> Tuple {
+pub fn cross(a: &Tuple, b: &Tuple) -> Tuple {
     Tuple::vector(
         a.y * b.z - a.z * b.y,
         a.z * b.x - a.x * b.z,
@@ -178,6 +177,7 @@ mod tests {
 
         assert_eq!(a1 + a2, Tuple::new(1.0, 1.0, 6.0, 1.0));
     }
+
     #[test]
     fn it_tests_tuples_can_be_subtracted() {
         let a1 = Tuple::point(3.0, 2.0, 1.0);
@@ -207,6 +207,7 @@ mod tests {
         assert_eq!(res, Tuple::vector(-2.0, -4.0, -6.0));
         assert_eq!(res.kind(), TupleKinds::Vector);
     }
+
     #[test]
     fn it_can_subtract_a_vector_from_the_zero_vector() {
         let zero = Tuple::vector(0.0, 0.0, 0.0);
@@ -216,6 +217,7 @@ mod tests {
         assert_eq!(res, Tuple::vector(-1.0, 2.0, -3.0));
         assert_eq!(res.kind(), TupleKinds::Vector);
     }
+
     #[test]
     fn it_can_negate_a_tuple() {
         let t = Tuple::new(1.0, -2.0, 3.0, -4.0);
@@ -249,6 +251,7 @@ mod tests {
 
         assert_eq!(res, Tuple::new(0.5, -1.0, 1.5, -2.0))
     }
+
     #[test]
     fn it_can_compute_vector_magnitude_1() {
         let v = Tuple::vector(1.0, 0.0, 0.0);
