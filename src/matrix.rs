@@ -135,6 +135,14 @@ impl Matrix {
         }
         Matrix::new(self.width, self.height, inverse_data)
     }
+
+    pub fn translation(x: f64, y: f64, z: f64) -> Self {
+        let mut identity = Self::identity(4, 4);
+        identity.data[coords_to_index(4, 0, 3)] = x;
+        identity.data[coords_to_index(4, 1, 3)] = y;
+        identity.data[coords_to_index(4, 2, 3)] = z;
+        identity
+    }
 }
 
 impl Mul for Matrix {
@@ -200,6 +208,7 @@ impl PartialEq for Matrix {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::tuple::TupleKinds::Point;
 
     #[test]
     fn test_a_4x4_matrix_can_be_created() {
@@ -772,5 +781,37 @@ mod tests {
                 ],
             )
         )
+    }
+
+    #[test]
+    fn test_multiplying_by_a_translation_matrix() {
+        // Given transform ← translation(5, -3, 2)
+        // And p ← point(-3, 4, 5)
+        // Then transform * p = point(2, 1, 7)
+        let transform = Matrix::translation(5.0, -3.0, 2.0);
+        let p = Tuple::point(-3.0, 4.0, 5.0);
+
+        assert_eq!(transform * p, Tuple::point(2.0, 1.0, 7.0));
+    }
+
+    #[test]
+    fn test_multiply_by_the_inverse_of_a_translation_matrix() {
+        // Given transform ← translation(5, -3, 2)
+        //   And inv ← inverse(transform)
+        //   And p ← point(-3, 4, 5)
+        // Then inv * p = point(-8, 7, 3)
+        let transform = Matrix::translation(5.0, -3.0, 2.0);
+        let inv = transform.inverse();
+        let p = Tuple::point(-3.0, 4.0, 5.0);
+
+        assert_eq!(inv * p, Tuple::point(-8.0, 7.0, 3.0));
+    }
+
+    #[test]
+    fn test_translation_does_not_affect_vectors() {
+        let transform = Matrix::translation(5.0, -3.0, 2.0);
+        let v = Tuple::vector(-3.0, 4.0, 5.0);
+
+        assert_eq!(transform * v, Tuple::vector(-3.0, 4.0, 5.0));
     }
 }
