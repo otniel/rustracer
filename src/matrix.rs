@@ -137,11 +137,19 @@ impl Matrix {
     }
 
     pub fn translation(x: f64, y: f64, z: f64) -> Self {
-        let mut identity = Self::identity(4, 4);
-        identity.data[coords_to_index(4, 0, 3)] = x;
-        identity.data[coords_to_index(4, 1, 3)] = y;
-        identity.data[coords_to_index(4, 2, 3)] = z;
-        identity
+        let mut translation_matrix = Self::identity(4, 4);
+        translation_matrix.data[coords_to_index(4, 0, 3)] = x;
+        translation_matrix.data[coords_to_index(4, 1, 3)] = y;
+        translation_matrix.data[coords_to_index(4, 2, 3)] = z;
+        translation_matrix
+    }
+
+    pub fn scaling(x: f64, y: f64, z: f64) -> Self {
+        let mut scaling_matrix = Self::identity(4, 4);
+        scaling_matrix.data[coords_to_index(4, 0, 0)] = x;
+        scaling_matrix.data[coords_to_index(4, 1, 1)] = y;
+        scaling_matrix.data[coords_to_index(4, 2, 2)] = z;
+        scaling_matrix
     }
 }
 
@@ -813,5 +821,40 @@ mod tests {
         let v = Tuple::vector(-3.0, 4.0, 5.0);
 
         assert_eq!(transform * v, Tuple::vector(-3.0, 4.0, 5.0));
+    }
+
+    #[test]
+    fn test_a_scaling_matrix_applied_to_a_point() {
+        // Given transform ← scaling(2, 3, 4)
+        // And p ← point(-4, 6, 8)
+        // Then transform * p = point(-8, 18, 32)
+        let transform = Matrix::scaling(2.0, 3.0, 4.0);
+        let p = Tuple::point(-4.0, 6.0, 8.0);
+
+        assert_eq!(transform * p, Tuple::point(-8.0, 18.0, 32.0));
+    }
+
+    #[test]
+    fn test_a_scaling_matrix_applied_to_a_vector() {
+        // Given transform ← scaling(2, 3, 4)
+        // And v ← vector(-4, 6, 8)
+        // Then transform * v = vector(-8, 18, 32)
+        let transform = Matrix::scaling(2.0, 3.0, 4.0);
+        let v = Tuple::vector(-4.0, 6.0, 8.0);
+
+        assert_eq!(transform * v, Tuple::vector(-8.0, 18.0, 32.0));
+    }
+
+    #[test]
+    fn test_multiplying_by_the_inverse_of_a_scaling_matrix() {
+        // Given transform ← scaling(2, 3, 4)
+        // And inv ← inverse(transform)
+        // And v ← vector(-4, 6, 8)
+        // Then inv * v = vector(-2, 2, 2)
+        let transform = Matrix::scaling(2.0, 3.0, 4.0);
+        let inv = transform.inverse();
+        let v = Tuple::vector(-4.0, 6.0, 8.0);
+
+        assert_eq!(inv * v, Tuple::vector(-2.0, 2.0, 2.0));
     }
 }
