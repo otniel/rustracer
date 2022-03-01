@@ -857,4 +857,15 @@ mod tests {
 
         assert_eq!(inv * v, Tuple::vector(-2.0, 2.0, 2.0));
     }
+
+    #[test]
+    fn test_reflection_is_scaling_by_a_negative_number() {
+        // Given transform ← scaling(-1, 1, 1)
+        // And p ← point(2, 3, 4)
+        // Then transform * p = point(-2, 3, 4)
+        let transform = Matrix::scaling(-1.0, 1.0, 1.0);
+        let p = Tuple::point(2.0, 3.0, 4.0);
+
+        assert_eq!(transform * p, Tuple::point(-2.0, 3.0, 4.0))
+    }
 }
